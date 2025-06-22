@@ -1,65 +1,1306 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ka">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <title>ერთად ვიყიდოთ - კოლაბორაციული შოპინგი</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body {
-            font-family: Arial;
+        .search-container {
+            margin: 20px;
             text-align: center;
-            padding-top: 50px;
-            transition: background-color 0.3s;
         }
-        button { 
+        .search-bar {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+            font-size: 16px;
+        }
+        .search-button {
+            padding: 10px 20px;
+            background-color: #e82929;
             color: white;
             border: none;
-            padding: 8px 15px;
-            margin: 5px;
-            border-radius: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+        .search-button:hover {
+            background-color: #ff0000;
+        }
+        :root {
+            --primary: #E53935;
+            --primary-dark: #C62828;
+            --secondary: #FFD600;
+            --light: #F5F5F5;
+            --dark: #212121;
+            --gray: #757575;
+            --light-gray: #EEEEEE;
+            --success: #4CAF50;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #FAFAFA;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* მთავარი ლეიაუტი */
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
             cursor: pointer;
         }
-        #l { 
-            background-color: rgb(255, 0, 0);
-            color: rgb(0, 0, 0);
+        
+        .cart-icon {
+            position: relative;
+            color: var(--dark);
+            font-size: 20px;
+            text-decoration: none;
         }
-        #lo {
-            background-color: rgb(4, 255, 0);
-            color: rgb(0, 0, 0);
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        #ll {
-            background-color: rgb(229, 255, 0);
-            color: black;
+        
+        .back-to-shop {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
         }
-        #lll{
+        
+        .back-to-shop:hover {
+            color: var(--primary-dark);
+            transform: translateX(-4px);
+        }
+        
+        /* კალათის სტილები */
+        .cart-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-section {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .cart-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+        }
+        
+        .cart-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .cart-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .cart-owner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .cart-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .cart-items {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+        }
+        
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--light-gray);
+            transition: var(--transition);
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .item-img {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: var(--light-gray);
+        }
+        
+        .item-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--dark);
+        }
+        
+        .item-price {
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--primary);
+        }
+        
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 18px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .remove-item:hover {
+            color: var(--primary);
+            transform: scale(1.2);
+        }
+        
+        .cart-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .cart-total {
+            text-align: right;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .cart-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .cart-btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .cart-btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+        
+        .cart-btn-secondary {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .cart-btn-secondary:hover {
+            background-color: #ffea00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 222, 0, 0.3);
+        }
+        
+        /* პროდუქტების სტილები */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .filter-btn {
+            background-color: white;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--light-gray);
+            position: relative;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .product-info {
+            padding: 16px;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .product-price {
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+        
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-to-cart:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+        
+        /* პროდუქტის დეტალური ინფორმაცია ჰოვერზე */
+        .product-hover-info {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .product-card:hover .product-hover-info {
+            opacity: 1;
+        }
+        
+        .hover-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+        }
+        
+        .hover-description {
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .hover-details {
+            font-size: 13px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .hover-details i {
+            color: var(--secondary);
+            width: 18px;
+            text-align: center;
+        }
+        
+        /* გადახდის მოდალი */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-container {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease-out;
+        }
+        
+        .modal-show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .close-btn:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .payment-summary {
+            margin-bottom: 24px;
+        }
+        
+        .summary-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--dark);
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed var(--light-gray);
+        }
+        
+        .summary-label {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .summary-value {
+            font-weight: 600;
+        }
+        
+        .summary-total {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .payment-methods {
+            margin-bottom: 24px;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary);
+            background-color: rgba(229, 57, 53, 0.05);
+        }
+        
+        .method-icon {
+            margin-right: 16px;
+            font-size: 24px;
+            color: var(--primary);
+        }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+        
+        .method-desc {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .pay-now-btn {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .pay-now-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+        }
+        
+        /* ანიმაციები */
+        @keyframes flyToCart {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--move-x), var(--move-y)) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .flying-item {
+            position: fixed;
+            z-index: 1000;
+            animation: flyToCart 0.8s forwards;
+            pointer-events: none;
             background: white;
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .flying-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+        }
+        
+        .flying-item span {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* გვერდების გადართვა */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* რესპონსივობა */
+        @media (max-width: 768px) {
+            .main-wrapper {
+                padding: 16px;
+            }
+            
+            .cart-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .product-hover-info {
+                padding: 12px;
+                font-size: 90%;
+            }
         }
     </style>
-    <div id="lll">
-        <h1>hi</h1>
-    <button id="l">წითელი</button>
-    <button id="lo">მწვანე</button>
-    <button id="ll">ყვითელი</button>
-</div>
+</head>
+<body>
+    
+    <!-- მთავარი კონტენტი -->
+    <div class="main-wrapper">
+        <div class="header">
+            
+            <a href="#" class="logo" id="home-link">
+                <i class="fas fa-users logo-icon"></i>
+                <span>ერთად ვიყიდოთ</span>
+            </a>
+             <div class="search-container">
+        <input type="text" class="search-bar" placeholder="ძიება...">
+        <button class="search-button">ძებნა</button>
+    </div>
+            
+            <div class="user-menu">
+                <a href="#" class="cart-icon" id="cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count">0</span>
+                </a>
+                <div class="user-avatar" id="user-avatar">თ</div>
+            </div>
+        </div>
+        
+        <!-- მთავარი გვერდი -->
+         
+        <div class="page active" id="shop-page">
+            <div class="products-header">
+                <h2 class="section-title">პროდუქტები</h2>
+                <button class="filter-btn">
+                    <i class="fas fa-filter"></i> ფილტრი
+                </button>
+            </div>
+            
+            <div class="products-grid" id="products-grid">
+                <!-- პროდუქტები დაემატება დინამიურად -->
+            </div>
+        </div>
+        
+        <!-- კალათის გვერდი -->
+        <div class="page" id="cart-page">
+            <a href="#" class="back-to-shop" id="back-to-shop">
+                <i class="fas fa-arrow-left"></i> მაღაზიაში დაბრუნება
+            </a>
+            
+            <h1 class="section-title">თქვენი კალათა</h1>
+            
+            <div class="cart-section">
+                <div class="cart-card">
+                    <div class="cart-header">
+                        <div>
+                            <div class="cart-title">ჩემი კალათა</div>
+                            <div class="cart-owner">
+                                <div class="cart-avatar">თ</div>
+                                <span>თქვენ</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-shopping-basket"></i>
+                    </div>
+                    
+                    <div class="cart-items" id="my-cart-items">
+                        <!-- ნივთები დაემატება დინამიურად -->
+                    </div>
+                    
+                    <div class="cart-footer">
+                        <div class="cart-total">
+                            სულ: <span id="my-cart-total">0.00</span> ლარი
+                        </div>
+                        <button class="cart-btn cart-btn-secondary" id="checkout-btn" disabled>
+                            <i class="fas fa-shopping-cart"></i> შეკვეთის დასრულება
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="cart-card">
+                    <div class="cart-header">
+                        <div>
+                            <div class="cart-title">სხვისი კალათა</div>
+                            <div class="cart-owner">
+                                <div class="cart-avatar">მ</div>
+                                <span>მარიამი</span>
+                            </div>
+                        </div>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    
+                    <div class="cart-items" id="other-cart-items">
+                        <div class="cart-item">
+                            <div class="item-info">
+                                <img src="https://via.placeholder.com/100x100?text=Case" class="item-img">
+                                <div class="item-details">
+                                    <div class="item-name">ტელეფონის საფარი</div>
+                                    <div class="item-price">8.50 ლარი</div>
+                                </div>
+                            </div>
+                            <button class="remove-item">&times;</button>
+                        </div>
+                        <div class="cart-item">
+                            <div class="item-info">
+                                <img src="https://via.placeholder.com/100x100?text=Headphones" class="item-img">
+                                <div class="item-details">
+                                    <div class="item-name">ყურსასმენები</div>
+                                    <div class="item-price">12.99 ლარი</div>
+                                </div>
+                            </div>
+                            <button class="remove-item">&times;</button>
+                        </div>
+                    </div>
+                    
+                    <div class="cart-footer">
+                        <div class="cart-total">
+                            სულ: <span id="other-cart-total">21.49</span> ლარი
+                        </div>
+                        <button class="cart-btn cart-btn-primary" id="join-cart-btn">
+                            <i class="fas fa-user-plus"></i> შეუერთდით ამ კალათას
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- გადახდის მოდალი -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-container" id="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title">გადახდის დეტალები</h3>
+                <button class="close-btn" id="close-payment-btn">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="payment-summary">
+                    <h4 class="summary-title">თქვენი შეკვეთა</h4>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">თქვენი ნივთები:</span>
+                        <span class="summary-value" id="payment-my-items">0.00 ლარი</span>
+                    </div>
+                    
+                    <div class="summary-row">
+                        <span class="summary-label">მარიამის ნივთები:</span>
+                        <span class="summary-value" id="payment-other-items">21.49 ლარი</span>
+                    </div>
+                    
+                    <div class="summary-row" style="border-bottom: none; padding-bottom: 0;">
+                        <span class="summary-label">მიტანის საფასური:</span>
+                        <span class="summary-value">5.00 ლარი</span>
+                    </div>
+                </div>
+                
+                <div class="summary-row" style="margin-top: 16px; border-bottom: none;">
+                    <span class="summary-label" style="font-size: 16px;">ჯამური თანხა:</span>
+                    <span class="summary-total" id="payment-total">26.49 ლარი</span>
+                </div>
+                
+                <div class="payment-methods">
+                    <h4 class="summary-title">გადახდის მეთოდი</h4>
+                    
+                    <div class="payment-method selected">
+                        <i class="fas fa-credit-card method-icon"></i>
+                        <div class="method-info">
+                            <div class="method-title">ბანკის ბარათი</div>
+                            <div class="method-desc">Visa, Mastercard, American Express</div>
+                        </div>
+                        <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <i class="fas fa-university method-icon"></i>
+                        <div class="method-info">
+                            <div class="method-title">ინტერნეტ ბანკინგი</div>
+                            <div class="method-desc">TBC Pay, Bank of Georgia, Liberty Pay</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="pay-now-btn" id="pay-now-btn">
+                    <i class="fas fa-lock"></i> გადახდის დადასტურება
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        document.getElementById('l').addEventListener('click', function() {
-            document.body.style.backgroundColor = 'red';
+        // პროდუქტების მონაცემები
+        const products = [
+            {
+                id: 1, 
+                name: "USB კაბელი", 
+                price: 5.00, 
+                image: "https://hotsale.ge/files/offers/ginventor/green(new)/1.jpg",
+                description: "მაღალი ხარისხის USB კაბელი სწრაფი დამუხტვისთვის",
+                details: [
+                    "სიგრძე: 1.2 მეტრი",
+                    "მასალა: ნაილონის ქსოვილი",
+                    "თავსებადობა: USB-C to USB-A"
+                ]
+            },
+            {
+                id: 2, 
+                name: "ტელეფონის საფარი", 
+                price: 8.50, 
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxKZrOMr-YOCnGdNEa9Skl4T2mTk6OBDL26g&s",
+                description: "გამძლე და ელეგანტური საფარი თქვენი სმარტფონისთვის",
+                details: [
+                    "მასალა: თერმოპლასტიკური პოლიურეთანი",
+                    "ფერი: გამჭვირვალე",
+                    "თავსებადობა: iPhone 12/13/14"
+                ]
+            },
+            {
+                id: 3, 
+                name: "ყურსასმენები", 
+                price: 12.99, 
+                image: "https://bios.ge/images/detailed/24/5.jpg",
+                description: "უკაბელო ყურსასმენები მაღალი ხარისხის ხმით",
+                details: [
+                    "ბლუთუზის ვერსია: 5.0",
+                    "მუშაობის დრო: 20 საათი",
+                    "ფერი: შავი"
+                ]
+            },
+            {
+                id: 4, 
+                name: "პორტატული დენის ბანკი", 
+                price: 25.00, 
+                image: "https://cdn.allmarket.ge/2410/93/67/19/1439fddc828a4d579ed332dc8fab1d41/350054-1006252.png",
+                description: "10000mAh სიმძლავრის დენის ბანკი სწრაფი დამუხტვით",
+                details: [
+                    "ტევადობა: 10000 mAh",
+                    "შეყვანა: USB-C",
+                    "გამოსვლა: 2x USB-A"
+                ]
+            },
+            {
+                id: 5, 
+                name: "მაუსი", 
+                price: 15.50, 
+                image: "https://mouse.ge/files/resized/products/mausi-royal-kludge-rk-m30-gaming-mouse-wireless-2-4ghz-bluetooth-usb-black-orange-1.600x800.jpg",
+                description: "ერიგონომიული უკაბელო მაუსი გეიმინგისთვის",
+                details: [
+                    "DPI: 1600-6400 რეგულირებადი",
+                    "ბლუთუზის ვერსია: 5.1",
+                    "ფერი: შავი"
+                ]
+            },
+            {
+                id: 6, 
+                name: "კლავიატურა", 
+                price: 45.00, 
+                image: "https://gtv.ge/wp-content/uploads/2020/10/3031857.Chimera_GK-280DL_front_RU.1920x1014.png",
+                description: "მექანიკური კლავიატურა RGB განათებით",
+                details: [
+                    "სვიჩები: Red switches",
+                    "ფერი: შავი",
+                    "თავსებადობა: Windows/Mac"
+                ]
+            },
+            {
+                id: 7, 
+                name: "მონიტორი", 
+                price: 299.99, 
+                image: "https://klg.ge/wp-content/uploads/2024/05/210-BMGC_GE.jpg",
+                description: "24 ინჩის Full HD მონიტორი თხელი ჩარჩოებით",
+                details: [
+                    "გაფართოება: 1920x1080",
+                    "პანელის ტიპი: IPS",
+                    "განახლების სიჩქარე: 75Hz"
+                ]
+            },
+            {
+                id: 8, 
+                name: "ლეპტოპის ჩანთა", 
+                price: 35.00, 
+                image: "https://citrus.ge/images/products/CS626083/tJeklfMN9kcr0XYWs855uWMNYbA6nh2gzLu0AtQ6.jpeg",
+                description: "წყალგაუმტარი ლეპტოპის ჩანთა 15.6 ინჩისთვის",
+                details: [
+                    "მასალა: პოლიესტერი",
+                    "ფერი: ნაცრისფერი",
+                    "გვერდითი ჯიბეები: 2"
+                ]
+            },
+            {
+                id: 9, 
+                name: "HDMI კაბელი", 
+                price: 12.00, 
+                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZhStITQfuu7PYlxT-QQwRQIpgoJHm7oT4Qg&s",
+                description: "მაღალი სიჩქარის HDMI 2.0 კაბელი 4K გადაცემისთვის",
+                details: [
+                    "სიგრძე: 2 მეტრი",
+                    "გამტარუნარიანობა: 18Gbps",
+                    "თავსებადობა: 4K@60Hz"
+                ]
+            },
+            {
+                id: 10, 
+                name: "ვაიფაი როუტერი", 
+                price: 89.99, 
+                image: "https://alphatech.ge/wp-content/uploads/2023/01/TL-MR6400_UN_5.0_01_large_1616465031928x.jpg",
+                description: "ორმაგი დიაპაზონის WiFi 6 როუტერი",
+                details: [
+                    "სიჩქარე: 1800 Mbps",
+                    "პორტები: 4x Gigabit Ethernet",
+                    "დიაპაზონი: 150 კვ.მ"
+                ]
+            }
+        ];
+        
+        // კალათის მენეჯმენტი
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // აპლიკაციის ინიციალიზაცია
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
         });
         
-        document.getElementById('lo').addEventListener('click', function() {
-            document.body.style.backgroundColor = 'rgb(4, 255, 0)';
-        });
+        function initializeApp() {
+            // მომხმარებლის სახელის დაყენება
+            document.getElementById('user-avatar').textContent = 'თ';
+            
+            // გვერდების გადართვის ლოგიკა
+            const homeLink = document.getElementById('home-link');
+            const cartLink = document.getElementById('cart-link');
+            const backToShop = document.getElementById('back-to-shop');
+            const shopPage = document.getElementById('shop-page');
+            const cartPage = document.getElementById('cart-page');
+            
+            homeLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                shopPage.classList.add('active');
+                cartPage.classList.remove('active');
+            });
+            
+            cartLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                shopPage.classList.remove('active');
+                cartPage.classList.add('active');
+                loadCartItems();
+            });
+            
+            backToShop.addEventListener('click', function(e) {
+                e.preventDefault();
+                shopPage.classList.add('active');
+                cartPage.classList.remove('active');
+            });
+            
+            // პროდუქტების ჩვენება
+            const productsGrid = document.getElementById('products-grid');
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // შევქმნათ დეტალური ინფორმაციის HTML
+                const detailsHTML = product.details.map(detail => `
+                    <div class="hover-details">
+                        <i class="fas fa-check-circle"></i>
+                        <span>${detail}</span>
+                    </div>
+                `).join('');
+                
+                productCard.innerHTML = `
+                    <img src="${product.image}" class="product-img" alt="${product.name}">
+                    <div class="product-hover-info">
+                        <h3 class="hover-title">${product.name}</h3>
+                        <p class="hover-description">${product.description}</p>
+                        ${detailsHTML}
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-price">${product.price.toFixed(2)} ლარი</div>
+                        <button class="add-to-cart" data-id="${product.id}" data-name="${product.name}" data-price="${product.price}" data-image="${product.image}">
+                            <i class="fas fa-cart-plus"></i> კალათაში დამატება
+                        </button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+            
+            // კალათის ფუნქციონალი
+            const myCartItems = document.getElementById('my-cart-items');
+            const joinCartBtn = document.getElementById('join-cart-btn');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const paymentModal = document.getElementById('payment-modal');
+            const modalContainer = document.getElementById('modal-container');
+            
+            // კალათაში დამატება
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('add-to-cart')) {
+                    const productId = e.target.getAttribute('data-id');
+                    const productName = e.target.getAttribute('data-name');
+                    const productPrice = e.target.getAttribute('data-price');
+                    const productImage = e.target.getAttribute('data-image');
+                    
+                    // დავამატოთ პროდუქტი კალათაში
+                    const product = {
+                        id: productId,
+                        name: productName,
+                        price: parseFloat(productPrice),
+                        image: productImage
+                    };
+                    
+                    cart.push(product);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCartCount();
+                    
+                    // ანიმაცია - ნივთის გადაადგილება კალათაში
+                    const buttonRect = e.target.getBoundingClientRect();
+                    const cartRect = document.getElementById('cart-link').getBoundingClientRect();
+                    
+                    const flyingItem = document.createElement('div');
+                    flyingItem.className = 'flying-item';
+                    flyingItem.innerHTML = `
+                        <img src="${productImage}" width="30" height="30">
+                        <span>${productName}</span>
+                    `;
+                    
+                    // გამოვთვალოთ მანძილი კალათამდე
+                    const moveX = cartRect.left - buttonRect.left;
+                    const moveY = cartRect.top - buttonRect.top;
+                    
+                    flyingItem.style.setProperty('--move-x', `${moveX}px`);
+                    flyingItem.style.setProperty('--move-y', `${moveY}px`);
+                    
+                    flyingItem.style.left = `${buttonRect.left}px`;
+                    flyingItem.style.top = `${buttonRect.top}px`;
+                    
+                    document.body.appendChild(flyingItem);
+                    
+                    // წავშალოთ ანიმაციის ელემენტი
+                    setTimeout(() => {
+                        flyingItem.remove();
+                    }, 800);
+                }
+                
+                // ნივთის წაშლა კალათიდან
+                if (e.target.classList.contains('remove-item')) {
+                    const itemId = e.target.getAttribute('data-id');
+                    const itemToRemove = document.querySelector(`.cart-item[data-id="${itemId}"]`);
+                    
+                    if (itemToRemove) {
+                        itemToRemove.remove();
+                        
+                        // წავშალოთ პროდუქტი კალათიდან
+                        cart = cart.filter(item => item.id !== itemId);
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        updateCartCount();
+                        
+                        updateCartTotals();
+                        checkoutBtn.disabled = myCartItems.children.length === 0;
+                    }
+                }
+            });
+            
+            // სხვის კალათასთან შეერთება
+            joinCartBtn.addEventListener('click', function() {
+                if (myCartItems.children.length === 0) {
+                    alert('თქვენი კალათა ცარიელია!');
+                    return;
+                }
+                
+                // ანიმაცია - ნივთების გადატანა სხვის კალათაში
+                const itemsToMove = Array.from(myCartItems.children);
+                const otherCartItems = document.getElementById('other-cart-items');
+                
+                itemsToMove.forEach(item => {
+                    otherCartItems.appendChild(item.cloneNode(true));
+                });
+                
+                // გავასუფთავოთ კალათა
+                myCartItems.innerHTML = '';
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                
+                updateCartTotals();
+                checkoutBtn.disabled = true;
+                
+                alert('თქვენი ნივთები წარმატებით დაემატა მარიამის კალათას!');
+            });
+            
+            // გადახდის მოდალის გახსნა
+            checkoutBtn.addEventListener('click', function() {
+                paymentModal.style.display = 'flex';
+                setTimeout(() => {
+                    modalContainer.classList.add('modal-show');
+                }, 10);
+                
+                // გადახდის ინფორმაციის განახლება
+                document.getElementById('payment-my-items').textContent = 
+                    document.getElementById('my-cart-total').textContent + ' ლარი';
+                
+                const total = parseFloat(document.getElementById('my-cart-total').textContent) + 
+                             parseFloat(document.getElementById('other-cart-total').textContent) + 5.00;
+                
+                document.getElementById('payment-total').textContent = total.toFixed(2) + ' ლარი';
+            });
+            
+            // გადახდის მოდალის დახურვა
+            document.getElementById('close-payment-btn').addEventListener('click', function() {
+                modalContainer.classList.remove('modal-show');
+                setTimeout(() => {
+                    paymentModal.style.display = 'none';
+                }, 300);
+            });
+            
+            // გადახდის დადასტურება
+            document.getElementById('pay-now-btn').addEventListener('click', function() {
+                alert('შეკვეთა წარმატებით დადასტურდა! მადლობა თქვენი ყიდვისთვის.');
+                modalContainer.classList.remove('modal-show');
+                setTimeout(() => {
+                    paymentModal.style.display = 'none';
+                }, 300);
+                
+                // კალათის გასუფთავება
+                myCartItems.innerHTML = '';
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCount();
+                updateCartTotals();
+                checkoutBtn.disabled = true;
+            });
+            
+            // გადახდის მეთოდის არჩევა
+            document.querySelectorAll('.payment-method').forEach(method => {
+                method.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-method').forEach(m => {
+                        m.classList.remove('selected');
+                        m.querySelector('.fa-check-circle')?.remove();
+                    });
+                    
+                    this.classList.add('selected');
+                    
+                    const checkIcon = document.createElement('i');
+                    checkIcon.className = 'fas fa-check-circle';
+                    checkIcon.style.color = 'var(--success)';
+                    this.appendChild(checkIcon);
+                });
+            });
+            
+            // კალათის რაოდენობის განახლება
+            updateCartCount();
+        }
         
-        document.getElementById('ll').addEventListener('click', function() {
-            document.body.style.backgroundColor = 'rgb(229, 255, 0)';
-        });
+        // კალათის ნივთების ჩატვირთვა
+        function loadCartItems() {
+            const myCartItems = document.getElementById('my-cart-items');
+            myCartItems.innerHTML = '';
+            
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.setAttribute('data-id', item.id);
+                cartItem.innerHTML = `
+                    <div class="item-info">
+                        <img src="${item.image}" class="item-img">
+                        <div class="item-details">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-price">${parseFloat(item.price).toFixed(2)} ლარი</div>
+                        </div>
+                    </div>
+                    <button class="remove-item" data-id="${item.id}">&times;</button>
+                `;
+                myCartItems.appendChild(cartItem);
+            });
+            
+            updateCartTotals();
+            document.getElementById('checkout-btn').disabled = cart.length === 0;
+        }
+        
+        // კალათის რაოდენობის განახლება
+        function updateCartCount() {
+            const countElements = document.querySelectorAll('.cart-count');
+            countElements.forEach(el => {
+                el.textContent = cart.length;
+            });
+        }
+        
+        // კალათის ჯამური თანხის განახლება
+        function updateCartTotals() {
+            let myTotal = 0;
+            cart.forEach(item => {
+                myTotal += parseFloat(item.price);
+            });
+            
+            document.getElementById('my-cart-total').textContent = myTotal.toFixed(2);
+            
+            let otherTotal = 21.49; // საწყისი მნიშვნელობა
+            Array.from(document.getElementById('other-cart-items').children).forEach(item => {
+                const priceText = item.querySelector('.item-price').textContent;
+                otherTotal += parseFloat(priceText);
+            });
+            
+            document.getElementById('other-cart-total').textContent = otherTotal.toFixed(2);
+        }
     </script>
+    
 </body>
 </html>
